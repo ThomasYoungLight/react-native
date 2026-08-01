@@ -31,12 +31,27 @@ function runDemo() {
   );
   const bindings = g.__hybridBindings || {};
   const ids = Object.keys(bindings);
+  const byKind: {[string]: Array<string>} = {};
+  for (const id of ids) {
+    const kind = bindings[id].binding;
+    if (byKind[kind] == null) {
+      byKind[kind] = [];
+    }
+    byKind[kind].push(bindings[id].path);
+  }
   hlog(
     '[HybridAOT] dispatch decisions: ' +
       (ids.length === 0
         ? '(none)'
-        : ids
-            .map(id => id + '=' + bindings[id].binding + ' (' + bindings[id].path + ')')
+        : Object.keys(byKind)
+            .map(kind => {
+              const paths = byKind[kind];
+              const sample =
+                paths.length <= 4
+                  ? paths.join(', ')
+                  : paths.slice(0, 3).join(', ') + ', …';
+              return kind + '=' + paths.length + ' (' + sample + ')';
+            })
             .join('; ')),
   );
 

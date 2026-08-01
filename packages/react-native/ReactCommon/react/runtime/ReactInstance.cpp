@@ -36,8 +36,8 @@
 #define HYBRID_WEAK __attribute__((weak))
 #endif
 extern "C" HYBRID_WEAK SHUnit* sh_export_core(void);
-extern "C" HYBRID_WEAK SHUnit* sh_export_util(void);
 extern "C" HYBRID_WEAK SHUnit* sh_export_fabriccore(void);
+extern "C" HYBRID_WEAK SHUnit* sh_export_ring1(void);
 
 namespace facebook::react {
 
@@ -289,7 +289,7 @@ void ReactInstance::loadScript(
         // Hybrid AOT prototype: evaluate registry SHUnits BEFORE the bundle
         // so its __d prelude can dispatch per module by content hash. This is
         // additive: the bundle still evaluates normally below.
-        if (sh_export_core != nullptr || sh_export_util != nullptr ||
+        if (sh_export_core != nullptr || sh_export_ring1 != nullptr ||
             sh_export_fabriccore != nullptr) {
           if (auto* hybridAPI = jsi::castInterface<hermes::IHermes>(&runtime)) {
             // Reliable log channel for the demo (RCTLog is compiled out in
@@ -313,9 +313,9 @@ void ReactInstance::loadScript(
               LOG(WARNING) << "ReactInstance: hybrid AOT evaluateSHUnit(core)";
               hybridAPI->evaluateSHUnit(sh_export_core);
             }
-            if (sh_export_util != nullptr) {
-              LOG(WARNING) << "ReactInstance: hybrid AOT evaluateSHUnit(util)";
-              hybridAPI->evaluateSHUnit(sh_export_util);
+            if (sh_export_ring1 != nullptr) {
+              LOG(WARNING) << "ReactInstance: hybrid AOT evaluateSHUnit(ring1)";
+              hybridAPI->evaluateSHUnit(sh_export_ring1);
             }
             if (sh_export_fabriccore != nullptr) {
               LOG(WARNING)
