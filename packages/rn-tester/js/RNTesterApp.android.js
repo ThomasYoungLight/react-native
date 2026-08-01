@@ -10,6 +10,7 @@
 
 import RNTesterApp from './RNTesterAppShared';
 import {AppRegistry} from 'react-native';
+import './HybridAOTDemo';
 
 AppRegistry.registerComponent('RNTesterApp', () => RNTesterApp);
 

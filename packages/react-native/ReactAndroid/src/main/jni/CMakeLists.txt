@@ -259,6 +259,22 @@ add_library(reactnative
 )
 target_merge_so(reactnative)
 
+# Hybrid AOT prototype: link registry SHUnits (shermes-compiled native module
+# manifest) into libreactnative when present. The .o files must be compiled
+# against the same Hermes source + libhermesvm-config.h as the hermes-engine
+# build of this project.
+set(RN_HYBRID_SHUNIT_DIR "/Users/bm/Documents/code/AOT-RN/bench/hybrid/out/rn")
+if(ANDROID_ABI STREQUAL "arm64-v8a"
+   AND EXISTS "${RN_HYBRID_SHUNIT_DIR}/core_unit_rn.o"
+   AND EXISTS "${RN_HYBRID_SHUNIT_DIR}/util_unit_rn.o")
+  message(STATUS "Hybrid AOT: linking registry SHUnits from ${RN_HYBRID_SHUNIT_DIR}")
+  target_sources(reactnative PRIVATE
+          "${RN_HYBRID_SHUNIT_DIR}/core_unit_rn.o"
+          "${RN_HYBRID_SHUNIT_DIR}/util_unit_rn.o")
+  # The SHUnits call the _sh_* VM runtime, which lives in libhermesvm.so.
+  target_link_libraries(reactnative PRIVATE hermes-engine::hermesvm)
+endif()
+
 target_link_libraries(reactnative
           PUBLIC
             android

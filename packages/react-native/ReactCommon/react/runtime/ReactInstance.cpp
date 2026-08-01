@@ -26,6 +26,18 @@
 #include <memory>
 #include <utility>
 
+// Hybrid AOT prototype: registry SHUnits optionally linked into this binary.
+// Each unit registers entries in global.__nativeModules = {id: {hash, factory}}
+// which the JS bundle's __d prelude consults to dispatch unchanged modules to
+// native code. Weak so the build still links when no registry is present.
+#ifdef __APPLE__
+#define HYBRID_WEAK __attribute__((weak_import))
+#else
+#define HYBRID_WEAK __attribute__((weak))
+#endif
+extern "C" HYBRID_WEAK SHUnit* sh_export_core(void);
+extern "C" HYBRID_WEAK SHUnit* sh_export_util(void);
+
 namespace facebook::react {
 
 namespace {
@@ -271,6 +283,42 @@ void ReactInstance::loadScript(
               ReactMarker::RUN_JS_BUNDLE_START, scriptName.c_str());
           ReactMarker::logMarker(ReactMarker::INIT_REACT_RUNTIME_START);
           ReactMarker::logMarker(ReactMarker::APP_STARTUP_START);
+        }
+
+        // Hybrid AOT prototype: evaluate registry SHUnits BEFORE the bundle
+        // so its __d prelude can dispatch per module by content hash. This is
+        // additive: the bundle still evaluates normally below.
+        if (sh_export_core != nullptr || sh_export_util != nullptr) {
+          if (auto* hybridAPI = jsi::castInterface<hermes::IHermes>(&runtime)) {
+            // Reliable log channel for the demo (RCTLog is compiled out in
+            // release builds): glog goes to stderr on both platforms.
+            auto hybridLog = jsi::Function::createFromHostFunction(
+                runtime,
+                jsi::PropNameID::forAscii(runtime, "__hybridLog"),
+                1,
+                [](jsi::Runtime& rt,
+                   const jsi::Value&,
+                   const jsi::Value* args,
+                   size_t n) -> jsi::Value {
+                  if (n > 0) {
+                    LOG(WARNING)
+                        << "[HybridAOT] " << args[0].toString(rt).utf8(rt);
+                  }
+                  return jsi::Value::undefined();
+                });
+            runtime.global().setProperty(runtime, "__hybridLog", hybridLog);
+            if (sh_export_core != nullptr) {
+              LOG(WARNING) << "ReactInstance: hybrid AOT evaluateSHUnit(core)";
+              hybridAPI->evaluateSHUnit(sh_export_core);
+            }
+            if (sh_export_util != nullptr) {
+              LOG(WARNING) << "ReactInstance: hybrid AOT evaluateSHUnit(util)";
+              hybridAPI->evaluateSHUnit(sh_export_util);
+            }
+          } else {
+            LOG(WARNING)
+                << "ReactInstance: hybrid AOT SHUnits present but runtime is not Hermes";
+          }
         }
 
         // Check if the shermes unit is avaliable.

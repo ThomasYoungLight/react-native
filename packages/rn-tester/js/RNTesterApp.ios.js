@@ -14,6 +14,7 @@ import type {Node} from 'react';
 import RNTesterModuleContainer from './components/RNTesterModuleContainer';
 import SnapshotViewIOS from './examples/Snapshot/SnapshotViewIOS.ios';
 import RNTesterApp from './RNTesterAppShared';
+import './HybridAOTDemo';
 import RNTesterList from './utils/RNTesterList';
 import * as React from 'react';
 import {AppRegistry} from 'react-native';

@@ -13,6 +13,7 @@
 const {getDefaultConfig} = require('@react-native/metro-config');
 const {mergeConfig} = require('metro-config');
 const path = require('node:path');
+const hybridSerializer = require('./hybrid-serializer');
 
 /**
  * This cli config is needed for development purposes, e.g. for running
@@ -41,6 +42,10 @@ const config = {
     extraNodeModules: {
       'react-native': path.resolve(__dirname, '../react-native'),
     },
+  },
+  serializer: {
+    createModuleIdFactory: hybridSerializer.createModuleIdFactory,
+    customSerializer: hybridSerializer.customSerializer,
   },
 };
 
