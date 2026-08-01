@@ -14,7 +14,7 @@
 const TAKE_OVER = true;
 
 if (TAKE_OVER) {
-  const {AppRegistry} = require('react-native');
+  const {AppRegistry, Platform, StatusBar} = require('react-native');
   // Ensure the real view configs are registered before we resolve them.
   require('react-native/Libraries/Components/View/ViewNativeComponent');
   require('react-native/Libraries/Text/TextNativeComponent');
@@ -51,11 +51,23 @@ if (TAKE_OVER) {
         core.dispatchTouch(target, eventType, nativeEvent);
       });
     }
+    // The takeover surface is edge-to-edge; RNTester's AppContainer never
+    // runs, so handle the system bars here. Android's status-bar height is a
+    // real constant; the gesture-nav/home-indicator heights are estimates (a
+    // production integration would plumb WindowInsets through the surface).
+    if (Platform.OS === 'android') {
+      StatusBar.setBarStyle('dark-content');
+    }
+    const insetTop =
+      Platform.OS === 'android' ? StatusBar.currentHeight ?? 28 : 59;
+    const insetBottom = Platform.OS === 'android' ? 48 : 34;
     const env = {
       ui,
       rootTag: appParameters.rootTag,
       getViewConfig: (name: string) => ReactNativeViewConfigRegistry.get(name),
       banner: core.impl,
+      insetTop,
+      insetBottom,
       log: hlog,
     };
     core.start(env);

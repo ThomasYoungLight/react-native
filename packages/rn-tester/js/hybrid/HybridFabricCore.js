@@ -5822,11 +5822,13 @@ function installFabricApp(RA) {
     var header = h("RCTText", { style: headerStyle }, headerText);
     var listStyle = mkObj();
     listStyle.flex = 1;
+    listStyle.overflow = "hidden";
     var list = h("RCTView", { style: listStyle }, rows);
     var rootStyle = mkObj();
     rootStyle.flex = 1;
     rootStyle.backgroundColor = "#eef1f6";
-    rootStyle.paddingTop = 70;
+    rootStyle.paddingTop = anyVal(props.insetTop !== void 0 ? props.insetTop : 62) + 8;
+    rootStyle.paddingBottom = anyVal(props.insetBottom !== void 0 ? props.insetBottom : 24);
     return h("RCTView", { style: rootStyle }, header, list);
   }
   var api = mkObj();
@@ -5962,7 +5964,11 @@ function start(env) {
   );
   R.flushSync(function() {
     R.updateContainer(
-      React.createElement(appApi.App, { banner: env.banner }),
+      React.createElement(appApi.App, {
+        banner: env.banner,
+        insetTop: env.insetTop,
+        insetBottom: env.insetBottom
+      }),
       rootHandle,
       null,
       null
