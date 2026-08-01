@@ -30,6 +30,8 @@ AppRegistry.registerComponent('RNTesterApp', () => RNTesterApp);
 // Must run AFTER registerComponent (its registerRunnable overrides the same
 // app key), hence require() rather than a hoisted import.
 require('./HybridFabricDemo');
+// HybridShop real-app trial: registers over 'RNTesterApp' when its flag is on.
+require('./hybridshop/HybridShopApp');
 
 // Register suitable examples for snapshot tests
 RNTesterList.Components.concat(RNTesterList.APIs).forEach(

@@ -81,6 +81,7 @@ function buildDispatchPrelude() {
   return (
     '(function (g) {\n' +
     "  'use strict';\n" +
+    '  g.__hybridT0 = Date.now();\n' +
     '  var orig = g.__d;\n' +
     '  if (typeof orig !== "function") { return; }\n' +
     '  var bindings = {};\n' +

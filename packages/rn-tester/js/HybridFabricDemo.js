@@ -11,15 +11,21 @@
 
 'use strict';
 
-const TAKE_OVER = true;
+// Off while the HybridShop real-app trial owns the root surface
+// (js/hybridshop/HybridShopApp.js); flip back to re-enable the direct
+// nativeFabricUIManager takeover demo.
+const TAKE_OVER = false;
+
+// Top-level (not inside the flag): Metro constant-folds `if (false)` and
+// would otherwise drop HybridFabricCore from the bundle graph entirely,
+// unkeying the fabriccore ring-0 unit.
+const {AppRegistry, Platform, StatusBar} = require('react-native');
+require('react-native/Libraries/Components/View/ViewNativeComponent');
+require('react-native/Libraries/Text/TextNativeComponent');
+const ReactNativeViewConfigRegistry = require('react-native/Libraries/Renderer/shims/ReactNativeViewConfigRegistry');
+const core = require('./hybrid/HybridFabricCore');
 
 if (TAKE_OVER) {
-  const {AppRegistry, Platform, StatusBar} = require('react-native');
-  // Ensure the real view configs are registered before we resolve them.
-  require('react-native/Libraries/Components/View/ViewNativeComponent');
-  require('react-native/Libraries/Text/TextNativeComponent');
-  const ReactNativeViewConfigRegistry = require('react-native/Libraries/Renderer/shims/ReactNativeViewConfigRegistry');
-  const core = require('./hybrid/HybridFabricCore');
 
   const g: $FlowFixMe = global;
   const hlog = (m: string) => {
@@ -92,4 +98,6 @@ if (TAKE_OVER) {
   AppRegistry.registerRunnable('RNTesterApp', run);
 }
 
-module.exports = {};
+// Export the core reference so Metro's dead-code elimination cannot drop the
+// HybridFabricCore dependency while TAKE_OVER is false.
+module.exports = {core};
