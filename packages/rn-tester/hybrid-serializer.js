@@ -85,17 +85,29 @@ function buildDispatchPrelude() {
     '  if (typeof orig !== "function") { return; }\n' +
     '  var bindings = {};\n' +
     '  g.__hybridBindings = bindings;\n' +
+    '  var executed = {};\n' +
+    '  var execSeq = 0;\n' +
+    '  g.__hybridExecuted = executed;\n' +
     '  g.__d = function (factory, id, deps, hash) {\n' +
     '    var native = g.__nativeModules;\n' +
     '    var n = native && hash != null ? native[id] : null;\n' +
+    '    var chosen = factory;\n' +
     '    if (n) {\n' +
     '      if (n.hash === hash) {\n' +
     "        bindings[id] = {binding: 'native', path: n.path};\n" +
-    '        return orig(n.factory, id, deps);\n' +
+    '        chosen = n.factory;\n' +
+    '      } else {\n' +
+    "        bindings[id] = {binding: 'shadowed-ota-changed', path: n.path};\n" +
     '      }\n' +
-    "      bindings[id] = {binding: 'shadowed-ota-changed', path: n.path};\n" +
     '    }\n' +
-    '    return orig(factory, id, deps);\n' +
+    '    // execution recorder: which factories actually RUN (first require),\n' +
+    '    // in order — the startup profile that drives ring-1 selection. Module\n' +
+    '    // ids are stable path hashes, so an id list is a durable profile.\n' +
+    '    var wrapped = function () {\n' +
+    '      executed[id] = execSeq++;\n' +
+    '      return chosen.apply(this, arguments);\n' +
+    '    };\n' +
+    '    return orig(wrapped, id, deps);\n' +
     '  };\n' +
     "})(typeof globalThis !== 'undefined' ? globalThis : this);"
   );

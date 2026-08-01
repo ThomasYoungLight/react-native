@@ -265,12 +265,14 @@ target_merge_so(reactnative)
 # build of this project.
 set(RN_HYBRID_SHUNIT_DIR "/Users/bm/Documents/code/AOT-RN/bench/hybrid/out/rn")
 if(ANDROID_ABI STREQUAL "arm64-v8a"
-   AND EXISTS "${RN_HYBRID_SHUNIT_DIR}/core_unit_rn.o"
-   AND EXISTS "${RN_HYBRID_SHUNIT_DIR}/ring1_unit_rn.o")
+   AND EXISTS "${RN_HYBRID_SHUNIT_DIR}/core_unit_rn.o")
   message(STATUS "Hybrid AOT: linking registry SHUnits from ${RN_HYBRID_SHUNIT_DIR}")
   target_sources(reactnative PRIVATE
-          "${RN_HYBRID_SHUNIT_DIR}/core_unit_rn.o"
-          "${RN_HYBRID_SHUNIT_DIR}/ring1_unit_rn.o")
+          "${RN_HYBRID_SHUNIT_DIR}/core_unit_rn.o")
+  if(EXISTS "${RN_HYBRID_SHUNIT_DIR}/ring1_unit_rn.o")
+    target_sources(reactnative PRIVATE
+            "${RN_HYBRID_SHUNIT_DIR}/ring1_unit_rn.o")
+  endif()
   if(EXISTS "${RN_HYBRID_SHUNIT_DIR}/fabric_unit_rn.o")
     target_sources(reactnative PRIVATE
             "${RN_HYBRID_SHUNIT_DIR}/fabric_unit_rn.o")

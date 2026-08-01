@@ -23,6 +23,7 @@
 #include <react/timing/primitives.h>
 #include <react/utils/jsi-utils.h>
 #include <iostream>
+#include <chrono>
 #include <memory>
 #include <utility>
 
@@ -309,19 +310,31 @@ void ReactInstance::loadScript(
                   return jsi::Value::undefined();
                 });
             runtime.global().setProperty(runtime, "__hybridLog", hybridLog);
+            // Per-unit evaluation timing, exposed to JS as
+            // global.__hybridEvalMs (glog is not visible in logcat on
+            // Android release builds).
+            auto evalStats = jsi::Object(runtime);
+            auto evalUnit = [&](const char* name, SHUnit* (*unit)(void)) {
+              auto t0 = std::chrono::steady_clock::now();
+              hybridAPI->evaluateSHUnit(unit);
+              auto ms = std::chrono::duration<double, std::milli>(
+                            std::chrono::steady_clock::now() - t0)
+                            .count();
+              LOG(WARNING) << "ReactInstance: hybrid AOT evaluateSHUnit("
+                           << name << ") took " << ms << " ms";
+              evalStats.setProperty(runtime, name, ms);
+            };
             if (sh_export_core != nullptr) {
-              LOG(WARNING) << "ReactInstance: hybrid AOT evaluateSHUnit(core)";
-              hybridAPI->evaluateSHUnit(sh_export_core);
+              evalUnit("core", sh_export_core);
             }
             if (sh_export_ring1 != nullptr) {
-              LOG(WARNING) << "ReactInstance: hybrid AOT evaluateSHUnit(ring1)";
-              hybridAPI->evaluateSHUnit(sh_export_ring1);
+              evalUnit("ring1", sh_export_ring1);
             }
             if (sh_export_fabriccore != nullptr) {
-              LOG(WARNING)
-                  << "ReactInstance: hybrid AOT evaluateSHUnit(fabriccore)";
-              hybridAPI->evaluateSHUnit(sh_export_fabriccore);
+              evalUnit("fabriccore", sh_export_fabriccore);
             }
+            runtime.global().setProperty(
+                runtime, "__hybridEvalMs", evalStats);
           } else {
             LOG(WARNING)
                 << "ReactInstance: hybrid AOT SHUnits present but runtime is not Hermes";

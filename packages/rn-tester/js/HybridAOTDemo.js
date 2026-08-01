@@ -23,6 +23,9 @@ function runDemo() {
     }
   };
   hlog('=== [HybridAOT] demo start (Metro plugin) ===');
+  if (g.__hybridEvalMs != null) {
+    hlog('[HybridAOT] SHUnit eval ms: ' + JSON.stringify(g.__hybridEvalMs));
+  }
   hlog(
     '[HybridAOT] __nativeModules: ' +
       (g.__nativeModules
@@ -54,6 +57,23 @@ function runDemo() {
             })
             .join('; ')),
   );
+
+  // Startup execution profile: module ids whose factories have RUN by now,
+  // in execution order. Extracted from the log into bench/hybrid/profiles/
+  // to drive profile-guided ring-1 selection.
+  const executed = g.__hybridExecuted || {};
+  const execIds = Object.keys(executed);
+  execIds.sort((a, b) => executed[a] - executed[b]);
+  hlog('[HybridAOT] executed: ' + execIds.length + ' module factories');
+  const CHUNK = 200;
+  for (let c = 0; c < execIds.length; c += CHUNK) {
+    hlog(
+      '[HybridAOT] profile[' +
+        c / CHUNK +
+        ']: ' +
+        execIds.slice(c, c + CHUNK).join(','),
+    );
+  }
 
   hlog(
     '[HybridAOT] util.tag()=' +
