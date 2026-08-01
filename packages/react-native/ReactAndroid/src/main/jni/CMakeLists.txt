@@ -271,6 +271,10 @@ if(ANDROID_ABI STREQUAL "arm64-v8a"
   target_sources(reactnative PRIVATE
           "${RN_HYBRID_SHUNIT_DIR}/core_unit_rn.o"
           "${RN_HYBRID_SHUNIT_DIR}/util_unit_rn.o")
+  if(EXISTS "${RN_HYBRID_SHUNIT_DIR}/fabric_unit_rn.o")
+    target_sources(reactnative PRIVATE
+            "${RN_HYBRID_SHUNIT_DIR}/fabric_unit_rn.o")
+  endif()
   # The SHUnits call the _sh_* VM runtime, which lives in libhermesvm.so.
   target_link_libraries(reactnative PRIVATE hermes-engine::hermesvm)
 endif()

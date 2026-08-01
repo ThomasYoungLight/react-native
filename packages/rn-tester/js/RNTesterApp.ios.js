@@ -27,6 +27,10 @@ AppRegistry.registerComponent('RootViewSizeFlexibilityExampleApp', () =>
 );
 AppRegistry.registerComponent('RNTesterApp', () => RNTesterApp);
 
+// Must run AFTER registerComponent (its registerRunnable overrides the same
+// app key), hence require() rather than a hoisted import.
+require('./HybridFabricDemo');
+
 // Register suitable examples for snapshot tests
 RNTesterList.Components.concat(RNTesterList.APIs).forEach(
   (Example: RNTesterModuleInfo) => {

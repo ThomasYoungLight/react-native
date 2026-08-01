@@ -92,7 +92,7 @@ var require_react_production_min = __commonJS({
     function Q(a, b) {
       return "object" === typeof a && null !== a && null != a.key ? escape("" + a.key) : b.toString(36);
     }
-    function R(a, b, e, d, c) {
+    function R2(a, b, e, d, c) {
       var k = typeof a;
       if ("undefined" === k || "boolean" === k) a = null;
       var h = false;
@@ -109,7 +109,7 @@ var require_react_production_min = __commonJS({
               h = true;
           }
       }
-      if (h) return h = a, c = c(h), a = "" === d ? "." + Q(h, 0) : d, I(c) ? (e = "", null != a && (e = a.replace(P, "$&/") + "/"), R(c, b, e, "", function(a2) {
+      if (h) return h = a, c = c(h), a = "" === d ? "." + Q(h, 0) : d, I(c) ? (e = "", null != a && (e = a.replace(P, "$&/") + "/"), R2(c, b, e, "", function(a2) {
         return a2;
       })) : null != c && (O(c) && (c = N(c, e + (!c.key || h && h.key === c.key ? "" : ("" + c.key).replace(P, "$&/") + "/") + a)), b.push(c)), 1;
       h = 0;
@@ -117,16 +117,16 @@ var require_react_production_min = __commonJS({
       if (I(a)) for (var g = 0; g < a.length; g++) {
         k = a[g];
         var f = d + Q(k, g);
-        h += R(k, b, e, f, c);
+        h += R2(k, b, e, f, c);
       }
-      else if (f = A(a), "function" === typeof f) for (a = f.call(a), g = 0; !(k = a.next()).done; ) k = k.value, f = d + Q(k, g++), h += R(k, b, e, f, c);
+      else if (f = A(a), "function" === typeof f) for (a = f.call(a), g = 0; !(k = a.next()).done; ) k = k.value, f = d + Q(k, g++), h += R2(k, b, e, f, c);
       else if ("object" === k) throw b = String(a), Error("Objects are not valid as a React child (found: " + ("[object Object]" === b ? "object with keys {" + Object.keys(a).join(", ") + "}" : b) + "). If you meant to render a collection of children, use an array instead.");
       return h;
     }
     function S(a, b, e) {
       if (null == a) return a;
       var d = [], c = 0;
-      R(a, d, "", "", function(a2) {
+      R2(a, d, "", "", function(a2) {
         return b.call(e, a2, c++);
       });
       return d;
@@ -404,7 +404,7 @@ var require_scheduler_production_min = __commonJS({
     function M() {
       return exports2.unstable_now() - Q < P ? false : true;
     }
-    function R() {
+    function R2() {
       if (null !== O) {
         var a = exports2.unstable_now();
         Q = a;
@@ -418,16 +418,16 @@ var require_scheduler_production_min = __commonJS({
     }
     var S;
     if ("function" === typeof F) S = function() {
-      F(R);
+      F(R2);
     };
     else if ("undefined" !== typeof MessageChannel) {
       T = new MessageChannel(), U = T.port2;
-      T.port1.onmessage = R;
+      T.port1.onmessage = R2;
       S = function() {
         U.postMessage(null);
       };
     } else S = function() {
-      D(R, 0);
+      D(R2, 0);
     };
     var T;
     var U;
@@ -3059,7 +3059,7 @@ var require_react_reconciler_production_min = __commonJS({
             }
             if (0 !== (b.flags & 128)) return b.lanes = c, b;
             c = null !== d;
-            c !== (null !== a && null !== a.memoizedState) && c && (b.child.flags |= 8192, 0 !== (b.mode & 1) && (null === a || 0 !== (I.current & 1) ? 0 === R && (R = 3) : ng()));
+            c !== (null !== a && null !== a.memoizedState) && c && (b.child.flags |= 8192, 0 !== (b.mode & 1) && (null === a || 0 !== (I.current & 1) ? 0 === R2 && (R2 = 3) : ng()));
             null !== b.updateQueue && (b.flags |= 4);
             Q(b);
             return null;
@@ -3077,7 +3077,7 @@ var require_react_reconciler_production_min = __commonJS({
             f = e.rendering;
             if (null === f) if (d) Ag(e, false);
             else {
-              if (0 !== R || null !== a && 0 !== (a.flags & 128)) for (a = b.child; null !== a; ) {
+              if (0 !== R2 || null !== a && 0 !== (a.flags & 128)) for (a = b.child; null !== a; ) {
                 f = we(a);
                 if (null !== f) {
                   b.flags |= 128;
@@ -3937,7 +3937,7 @@ var require_react_reconciler_production_min = __commonJS({
         }
         return b;
       }
-      var sh = Math.ceil, th = da.ReactCurrentDispatcher, uh = da.ReactCurrentOwner, W = da.ReactCurrentBatchConfig, H = 0, N = null, X = null, Z = 0, $f = 0, Zf = ic(0), R = 0, vh = null, le = 0, wh = 0, xh = 0, yh = null, zh = null, bh = 0, Dg = Infinity, Ah = null;
+      var sh = Math.ceil, th = da.ReactCurrentDispatcher, uh = da.ReactCurrentOwner, W = da.ReactCurrentBatchConfig, H = 0, N = null, X = null, Z = 0, $f = 0, Zf = ic(0), R2 = 0, vh = null, le = 0, wh = 0, xh = 0, yh = null, zh = null, bh = 0, Dg = Infinity, Ah = null;
       function Bh() {
         Dg = D() + 500;
       }
@@ -3955,7 +3955,7 @@ var require_react_reconciler_production_min = __commonJS({
       function af(a, b, c, d) {
         if (50 < Fh) throw Fh = 0, Gh = null, Error(n(185));
         Fc(a, c, d);
-        if (0 === (H & 2) || a !== N) a === N && (0 === (H & 2) && (wh |= c), 4 === R && Jh(a, Z)), Kh(a, d), 1 === c && 0 === H && 0 === (b.mode & 1) && (Bh(), Xc && ad());
+        if (0 === (H & 2) || a !== N) a === N && (0 === (H & 2) && (wh |= c), 4 === R2 && Jh(a, Z)), Kh(a, d), 1 === c && 0 === H && 0 === (b.mode & 1) && (Bh(), Xc && ad());
       }
       function Kh(a, b) {
         var c = a.callbackNode;
@@ -4016,7 +4016,7 @@ var require_react_reconciler_production_min = __commonJS({
           Ud();
           th.current = f;
           H = e;
-          null !== X ? b = 0 : (N = null, Z = 0, b = R);
+          null !== X ? b = 0 : (N = null, Z = 0, b = R2);
         }
         if (0 !== b) {
           2 === b && (e = Cc(a), 0 !== e && (d = e, b = Uh(a, e)));
@@ -4205,7 +4205,7 @@ var require_react_reconciler_production_min = __commonJS({
         N = a;
         X = a = Jd(a.current, null);
         Z = $f = b;
-        R = 0;
+        R2 = 0;
         vh = null;
         xh = wh = le = 0;
         zh = yh = null;
@@ -4244,7 +4244,7 @@ var require_react_reconciler_production_min = __commonJS({
             Ee = 0;
             uh.current = null;
             if (null === c || null === c.return) {
-              R = 1;
+              R2 = 1;
               vh = b;
               X = null;
               break;
@@ -4291,7 +4291,7 @@ var require_react_reconciler_production_min = __commonJS({
                 }
               }
               f = k = Ef(k, h);
-              4 !== R && (R = 2);
+              4 !== R2 && (R2 = 2);
               null === yh ? yh = [f] : yh.push(f);
               f = g;
               do {
@@ -4333,7 +4333,7 @@ var require_react_reconciler_production_min = __commonJS({
         return null === a ? Le : a;
       }
       function ng() {
-        if (0 === R || 3 === R || 2 === R) R = 4;
+        if (0 === R2 || 3 === R2 || 2 === R2) R2 = 4;
         null === N || 0 === (le & 268435455) && 0 === (wh & 268435455) || Jh(N, Z);
       }
       function Ph(a, b) {
@@ -4355,7 +4355,7 @@ var require_react_reconciler_production_min = __commonJS({
         if (null !== X) throw Error(n(261));
         N = null;
         Z = 0;
-        return R;
+        return R2;
       }
       function Zh() {
         for (; null !== X; ) $h(X);
@@ -4388,7 +4388,7 @@ var require_react_reconciler_production_min = __commonJS({
             }
             if (null !== a) a.flags |= 32768, a.subtreeFlags = 0, a.deletions = null;
             else {
-              R = 6;
+              R2 = 6;
               X = null;
               return;
             }
@@ -4400,7 +4400,7 @@ var require_react_reconciler_production_min = __commonJS({
           }
           X = b = a;
         } while (null !== b);
-        0 === R && (R = 5);
+        0 === R2 && (R2 = 5);
       }
       function Wh(a, b, c) {
         var d = C, e = W.transition;
@@ -4621,7 +4621,7 @@ var require_react_reconciler_production_min = __commonJS({
         null !== d && d.delete(b);
         b = O();
         a.pingedLanes |= a.suspendedLanes & c;
-        N === a && (Z & c) === c && (4 === R || 3 === R && (Z & 130023424) === Z && 500 > D() - bh ? Rh(a, 0) : xh |= c);
+        N === a && (Z & c) === c && (4 === R2 || 3 === R2 && (Z & 130023424) === Z && 500 > D() - bh ? Rh(a, 0) : xh |= c);
         Kh(a, b);
       }
       function di(a, b) {
@@ -5315,7 +5315,7 @@ var require_react_reconciler = __commonJS({
   }
 });
 
-// twin-entry.cjs
+// fabric-twin-entry.cjs
 function mkList() {
   return [];
 }
@@ -5331,299 +5331,530 @@ function anyVal(x) {
 function coerceInt(n) {
   return n | 0;
 }
-var hostStats = {
-  creates: 0,
-  textCreates: 0,
-  appends: 0,
-  inserts: 0,
-  removes: 0,
-  updates: 0,
-  textUpdates: 0,
-  clones: 0,
-  childSets: 0,
-  replaces: 0,
-  checksum: 0
-};
-var nextInstanceId = 1;
-function mix(n) {
-  var ni = coerceInt(n);
-  hostStats.checksum = (hostStats.checksum * 31 + ni | 0) >>> 0 | 0;
-}
-function hashStr(s) {
-  var h = 0;
-  var n = coerceInt(s.length);
-  for (var i = 0; i < n; i++) {
-    h = h * 33 + coerceInt(s.charCodeAt(i)) | 0;
+var emptyObject = {};
+var removedKeys = null;
+var removedKeyCount = 0;
+var deepDifferOptions = { unsafelyIgnoreFunctions: true };
+function deepDiffer(one, two, maxDepthOrOptions, maybeOptions) {
+  var options = typeof maxDepthOrOptions === "number" ? maybeOptions : maxDepthOrOptions;
+  var maxDepth = typeof maxDepthOrOptions === "number" ? maxDepthOrOptions : -1;
+  if (maxDepth === 0) {
+    return true;
   }
-  return h;
-}
-function hashVal(v) {
-  if (v === null || v === void 0) return 3;
-  if (typeof v === "number") return coerceInt(v);
-  if (typeof v === "boolean") return v ? 7 : 11;
-  if (typeof v === "string") return hashStr(v);
-  return 13;
-}
-function diffHostProps(oldProps, newProps, inst) {
-  var payload = anyNull();
-  for (var k in oldProps) {
-    if (k === "children") continue;
-    if (!(k in newProps)) {
-      if (payload === null) payload = mkList();
-      payload.push(k, null);
+  if (one === two) {
+    return false;
+  }
+  if (typeof one === "function" && typeof two === "function") {
+    var unsafelyIgnoreFunctions = options ? options.unsafelyIgnoreFunctions : void 0;
+    if (unsafelyIgnoreFunctions == null) {
+      unsafelyIgnoreFunctions = true;
+    }
+    return !unsafelyIgnoreFunctions;
+  }
+  if (typeof one !== "object" || one === null) {
+    return one !== two;
+  }
+  if (typeof two !== "object" || two === null) {
+    return true;
+  }
+  if (one.constructor !== two.constructor) {
+    return true;
+  }
+  if (Array.isArray(one)) {
+    var len = one.length;
+    if (two.length !== len) {
+      return true;
+    }
+    for (var ii = 0; ii < len; ii++) {
+      if (deepDiffer(one[ii], two[ii], maxDepth - 1, options)) {
+        return true;
+      }
+    }
+  } else {
+    for (var key in one) {
+      if (deepDiffer(one[key], two[key], maxDepth - 1, options)) {
+        return true;
+      }
+    }
+    for (var twoKey in two) {
+      if (one[twoKey] === void 0 && two[twoKey] !== void 0) {
+        return true;
+      }
     }
   }
-  for (var k2 in newProps) {
-    if (k2 === "children") continue;
-    if (oldProps[k2] !== newProps[k2]) {
-      if (payload === null) payload = mkList();
-      payload.push(k2, newProps[k2]);
+  return false;
+}
+function flattenStyleArrayInto(result, styles) {
+  for (var i = 0, styleLength = styles.length; i < styleLength; ++i) {
+    var style = styles[i];
+    if (style === null || typeof style !== "object") {
+      continue;
     }
+    if (Array.isArray(style)) {
+      flattenStyleArrayInto(result, style);
+      continue;
+    }
+    for (var key in style) {
+      result[key] = style[key];
+    }
+  }
+}
+function flattenStyle(style) {
+  if (style === null || typeof style !== "object") {
+    return void 0;
+  }
+  if (!Array.isArray(style)) {
+    return style;
+  }
+  var result = {};
+  flattenStyleArrayInto(result, style);
+  return result;
+}
+function defaultDiffer(prevProp, nextProp) {
+  if (typeof nextProp !== "object" || nextProp === null) {
+    return true;
+  } else {
+    return deepDiffer(prevProp, nextProp, deepDifferOptions);
+  }
+}
+function restoreDeletedValuesInNestedArray(updatePayload, node, validAttributes) {
+  if (Array.isArray(node)) {
+    var i = node.length;
+    while (i-- && removedKeyCount > 0) {
+      restoreDeletedValuesInNestedArray(updatePayload, node[i], validAttributes);
+    }
+  } else if (node && removedKeyCount > 0) {
+    var obj = node;
+    for (var propKey in removedKeys) {
+      if (!removedKeys[propKey]) {
+        continue;
+      }
+      var nextProp = obj[propKey];
+      if (nextProp === void 0) {
+        continue;
+      }
+      var attributeConfig = validAttributes[propKey];
+      if (!attributeConfig) {
+        continue;
+      }
+      if (typeof nextProp === "function") {
+        nextProp = true;
+      }
+      if (typeof nextProp === "undefined") {
+        nextProp = null;
+      }
+      if (typeof attributeConfig !== "object") {
+        updatePayload[propKey] = nextProp;
+      } else if (typeof attributeConfig.diff === "function" || typeof attributeConfig.process === "function") {
+        var nextValue = typeof attributeConfig.process === "function" ? attributeConfig.process(nextProp) : nextProp;
+        updatePayload[propKey] = nextValue;
+      }
+      removedKeys[propKey] = false;
+      removedKeyCount--;
+    }
+  }
+}
+function diffNestedArrayProperty(updatePayload, prevArray, nextArray, validAttributes) {
+  var minLength = prevArray.length < nextArray.length ? prevArray.length : nextArray.length;
+  var i;
+  for (i = 0; i < minLength; i++) {
+    updatePayload = diffNestedProperty(updatePayload, prevArray[i], nextArray[i], validAttributes);
+  }
+  for (; i < prevArray.length; i++) {
+    updatePayload = clearNestedProperty(updatePayload, prevArray[i], validAttributes);
+  }
+  for (; i < nextArray.length; i++) {
+    var nextProp = nextArray[i];
+    if (!nextProp) {
+      continue;
+    }
+    updatePayload = addNestedProperty(updatePayload, nextProp, validAttributes);
+  }
+  return updatePayload;
+}
+function diffNestedProperty(updatePayload, prevProp, nextProp, validAttributes) {
+  if (!updatePayload && prevProp === nextProp) {
+    return updatePayload;
+  }
+  if (!prevProp || !nextProp) {
+    if (nextProp) {
+      return addNestedProperty(updatePayload, nextProp, validAttributes);
+    }
+    if (prevProp) {
+      return clearNestedProperty(updatePayload, prevProp, validAttributes);
+    }
+    return updatePayload;
+  }
+  if (!Array.isArray(prevProp) && !Array.isArray(nextProp)) {
+    return diffProperties(updatePayload, prevProp, nextProp, validAttributes);
+  }
+  if (Array.isArray(prevProp) && Array.isArray(nextProp)) {
+    return diffNestedArrayProperty(updatePayload, prevProp, nextProp, validAttributes);
+  }
+  if (Array.isArray(prevProp)) {
+    return diffProperties(updatePayload, flattenStyle(prevProp), nextProp, validAttributes);
+  }
+  return diffProperties(updatePayload, prevProp, flattenStyle(nextProp), validAttributes);
+}
+function clearNestedProperty(updatePayload, prevProp, validAttributes) {
+  if (!prevProp) {
+    return updatePayload;
+  }
+  if (!Array.isArray(prevProp)) {
+    return clearProperties(updatePayload, prevProp, validAttributes);
+  }
+  for (var i = 0; i < prevProp.length; i++) {
+    updatePayload = clearNestedProperty(updatePayload, prevProp[i], validAttributes);
+  }
+  return updatePayload;
+}
+function diffProperties(updatePayload, prevProps, nextProps, validAttributes) {
+  var attributeConfig;
+  var nextProp;
+  var prevProp;
+  for (var propKey in nextProps) {
+    attributeConfig = validAttributes[propKey];
+    if (!attributeConfig) {
+      continue;
+    }
+    prevProp = prevProps[propKey];
+    nextProp = nextProps[propKey];
+    if (typeof nextProp === "function") {
+      var attributeConfigHasProcess = typeof attributeConfig === "object" && typeof attributeConfig.process === "function";
+      if (!attributeConfigHasProcess) {
+        nextProp = true;
+        if (typeof prevProp === "function") {
+          prevProp = true;
+        }
+      }
+    }
+    if (typeof nextProp === "undefined") {
+      nextProp = null;
+      if (typeof prevProp === "undefined") {
+        prevProp = null;
+      }
+    }
+    if (removedKeys) {
+      removedKeys[propKey] = false;
+    }
+    if (updatePayload && updatePayload[propKey] !== void 0) {
+      if (typeof attributeConfig !== "object") {
+        updatePayload[propKey] = nextProp;
+      } else if (typeof attributeConfig.diff === "function" || typeof attributeConfig.process === "function") {
+        var nextValue0 = typeof attributeConfig.process === "function" ? attributeConfig.process(nextProp) : nextProp;
+        updatePayload[propKey] = nextValue0;
+      }
+      continue;
+    }
+    if (prevProp === nextProp) {
+      continue;
+    }
+    if (typeof attributeConfig !== "object") {
+      if (defaultDiffer(prevProp, nextProp)) {
+        (updatePayload || (updatePayload = {}))[propKey] = nextProp;
+      }
+    } else if (typeof attributeConfig.diff === "function" || typeof attributeConfig.process === "function") {
+      var shouldUpdate = prevProp === void 0 || (typeof attributeConfig.diff === "function" ? attributeConfig.diff(prevProp, nextProp) : defaultDiffer(prevProp, nextProp));
+      if (shouldUpdate) {
+        var nextValue = typeof attributeConfig.process === "function" ? attributeConfig.process(nextProp) : nextProp;
+        (updatePayload || (updatePayload = {}))[propKey] = nextValue;
+      }
+    } else {
+      removedKeys = null;
+      removedKeyCount = 0;
+      updatePayload = diffNestedProperty(updatePayload, prevProp, nextProp, attributeConfig);
+      if (removedKeyCount > 0 && updatePayload) {
+        restoreDeletedValuesInNestedArray(updatePayload, nextProp, attributeConfig);
+        removedKeys = null;
+      }
+    }
+  }
+  for (var propKey2 in prevProps) {
+    if (nextProps[propKey2] !== void 0) {
+      continue;
+    }
+    attributeConfig = validAttributes[propKey2];
+    if (!attributeConfig) {
+      continue;
+    }
+    if (updatePayload && updatePayload[propKey2] !== void 0) {
+      continue;
+    }
+    prevProp = prevProps[propKey2];
+    if (prevProp === void 0) {
+      continue;
+    }
+    if (typeof attributeConfig !== "object" || typeof attributeConfig.diff === "function" || typeof attributeConfig.process === "function") {
+      (updatePayload || (updatePayload = {}))[propKey2] = null;
+      if (!removedKeys) {
+        removedKeys = {};
+      }
+      if (!removedKeys[propKey2]) {
+        removedKeys[propKey2] = true;
+        removedKeyCount++;
+      }
+    } else {
+      updatePayload = clearNestedProperty(updatePayload, prevProp, attributeConfig);
+    }
+  }
+  return updatePayload;
+}
+function addNestedProperty(payload, props, validAttributes) {
+  if (Array.isArray(props)) {
+    for (var i = 0; i < props.length; i++) {
+      payload = addNestedProperty(payload, props[i], validAttributes);
+    }
+    return payload;
+  }
+  for (var propKey in props) {
+    var prop = props[propKey];
+    var attributeConfig = validAttributes[propKey];
+    if (attributeConfig == null) {
+      continue;
+    }
+    var newValue;
+    if (prop === void 0) {
+      if (payload && payload[propKey] !== void 0) {
+        newValue = null;
+      } else {
+        continue;
+      }
+    } else if (typeof attributeConfig === "object") {
+      if (typeof attributeConfig.process === "function") {
+        newValue = attributeConfig.process(prop);
+      } else if (typeof attributeConfig.diff === "function") {
+        newValue = prop;
+      }
+    } else {
+      if (typeof prop === "function") {
+        newValue = true;
+      } else {
+        newValue = prop;
+      }
+    }
+    if (newValue !== void 0) {
+      if (!payload) {
+        payload = {};
+      }
+      payload[propKey] = newValue;
+      continue;
+    }
+    payload = addNestedProperty(payload, prop, attributeConfig);
   }
   return payload;
 }
+function clearProperties(updatePayload, prevProps, validAttributes) {
+  return diffProperties(updatePayload, prevProps, emptyObject, validAttributes);
+}
+function rnDiff(prevProps, nextProps, validAttributes) {
+  return diffProperties(null, prevProps, nextProps, validAttributes);
+}
+function fhDiff(prevProps, nextProps, validAttributes) {
+  return rnDiff(prevProps, nextProps, validAttributes);
+}
+function fhCreate(props, validAttributes) {
+  return addNestedProperty(null, props, validAttributes);
+}
+var FH = mkObj();
+FH.ui = anyNull();
+FH.rootTag = 0;
+FH.getViewConfig = anyNull();
+FH.nextTag = 2;
+FH.vcCache = anyNull();
+FH.stats = anyNull();
+function fhResetStats() {
+  var s = mkObj();
+  s.creates = 0;
+  s.textCreates = 0;
+  s.appends = 0;
+  s.clones = 0;
+  s.childSets = 0;
+  s.setAppends = 0;
+  s.completeRoots = 0;
+  FH.stats = s;
+}
+function fhInit(env) {
+  FH.ui = env.ui;
+  FH.rootTag = coerceInt(env.rootTag);
+  FH.getViewConfig = env.getViewConfig;
+  FH.nextTag = 2;
+  FH.vcCache = mkObj();
+  fhResetStats();
+}
+function fhViewConfig(type) {
+  var vc = FH.vcCache[type];
+  if (vc === void 0) {
+    vc = FH.getViewConfig(type);
+    FH.vcCache[type] = vc;
+  }
+  return vc;
+}
 function hcCreateInstance(type, props, fiber) {
-  hostStats.creates++;
-  var inst = { id: nextInstanceId++, type, props, children: mkList() };
-  mix(1);
-  mix(hashStr(type));
+  FH.stats.creates++;
+  var vc = fhViewConfig(type);
+  var tag = FH.nextTag;
+  FH.nextTag += 2;
+  var payload = fhCreate(props, vc.validAttributes);
+  var inst = mkObj();
+  inst.node = FH.ui.createNode(coerceInt(tag), vc.uiViewClassName, FH.rootTag, payload, fiber);
+  inst.va = vc.validAttributes;
   return inst;
 }
 function hcCreateTextInstance(txt, fiber) {
-  hostStats.textCreates++;
-  var inst = { id: nextInstanceId++, type: "#text", text: txt, children: null };
-  mix(2);
-  mix(hashStr(txt));
+  FH.stats.textCreates++;
+  var tag = FH.nextTag;
+  FH.nextTag += 2;
+  var payload = mkObj();
+  payload.text = txt;
+  var inst = mkObj();
+  inst.node = FH.ui.createNode(coerceInt(tag), "RCTRawText", FH.rootTag, payload, fiber);
+  inst.va = anyNull();
   return inst;
 }
 function hcAppendChild(parent, child) {
-  hostStats.appends++;
-  var idx = parent.children.indexOf(child);
-  if (idx !== -1) parent.children.splice(idx, 1);
-  parent.children.push(child);
-  mix(4);
-  mix(child.id);
+  FH.stats.appends++;
+  FH.ui.appendChild(parent.node, child.node);
 }
-function hcInsertBefore(parent, child, beforeChild) {
-  hostStats.inserts++;
-  var idx = parent.children.indexOf(child);
-  if (idx !== -1) parent.children.splice(idx, 1);
-  var at = parent.children.indexOf(beforeChild);
-  parent.children.splice(at, 0, child);
-  mix(5);
-  mix(child.id);
-  mix(beforeChild.id);
-}
-function hcRemoveChild(parent, child) {
-  hostStats.removes++;
-  var idx = parent.children.indexOf(child);
-  if (idx !== -1) parent.children.splice(idx, 1);
-  mix(6);
-  mix(child.id);
-}
-function hcCommitUpdate(inst, payload, newProps) {
-  hostStats.updates++;
-  inst.props = newProps;
-  mix(7);
-  mix(inst.id);
-  for (var i = 0; i < payload.length; i += 2) {
-    mix(hashStr(payload[i]));
-    mix(hashVal(payload[i + 1]));
+function hcCloneInstance(instance, updatePayload, type, newProps, keepChildren) {
+  FH.stats.clones++;
+  var node = anyNull();
+  if (keepChildren) {
+    if (updatePayload !== null && updatePayload !== void 0) {
+      node = FH.ui.cloneNodeWithNewProps(instance.node, updatePayload);
+    } else {
+      node = FH.ui.cloneNode(instance.node);
+    }
+  } else {
+    if (updatePayload !== null && updatePayload !== void 0) {
+      node = FH.ui.cloneNodeWithNewChildrenAndProps(instance.node, updatePayload);
+    } else {
+      node = FH.ui.cloneNodeWithNewChildren(instance.node);
+    }
   }
+  var inst = mkObj();
+  inst.node = node;
+  inst.va = instance.va;
+  return inst;
 }
-function hcCommitTextUpdate(inst, oldText, newText) {
-  hostStats.textUpdates++;
-  inst.text = newText;
-  mix(8);
-  mix(inst.id);
-  mix(hashStr(newText));
+function hcCreateContainerChildSet() {
+  FH.stats.childSets++;
+  return FH.ui.createChildSet();
 }
-function hostStatsLine() {
-  return "host: creates=" + String(hostStats.creates) + " textCreates=" + String(hostStats.textCreates) + " appends=" + String(hostStats.appends) + " inserts=" + String(hostStats.inserts) + " removes=" + String(hostStats.removes) + " updates=" + String(hostStats.updates) + " textUpdates=" + String(hostStats.textUpdates) + " clones=" + String(hostStats.clones) + " childSets=" + String(hostStats.childSets) + " replaces=" + String(hostStats.replaces) + " checksum=" + String(hostStats.checksum >>> 0);
+function hcAppendChildToContainerChildSet(childSet, child) {
+  FH.stats.setAppends++;
+  FH.ui.appendChildToSet(childSet, child.node);
 }
-function hcResetAll() {
-  nextInstanceId = 1;
-  hostStatsReset();
+function hcFinalizeContainerChildren(container, childSet) {
 }
-function hostStatsReset() {
-  hostStats.clones = 0;
-  hostStats.childSets = 0;
-  hostStats.replaces = 0;
-  hostStats.creates = 0;
-  hostStats.textCreates = 0;
-  hostStats.appends = 0;
-  hostStats.inserts = 0;
-  hostStats.removes = 0;
-  hostStats.updates = 0;
-  hostStats.textUpdates = 0;
-  hostStats.checksum = 0;
+function hcReplaceContainerChildren(container, childSet) {
+  FH.stats.completeRoots++;
+  FH.ui.completeRoot(coerceInt(container.containerTag), childSet);
 }
-function installFeedApp(RA) {
+function diffHostProps(oldProps, newProps, inst) {
+  return fhDiff(oldProps, newProps, inst.va);
+}
+function fhStatsLine() {
+  var s = FH.stats;
+  return "fabric-host: creates=" + String(s.creates) + " textCreates=" + String(s.textCreates) + " appends=" + String(s.appends) + " clones=" + String(s.clones) + " childSets=" + String(s.childSets) + " setAppends=" + String(s.setAppends) + " completeRoots=" + String(s.completeRoots);
+}
+function installFabricApp(RA) {
   var h = RA.createElement;
   var exposed = mkObj();
-  exposed.onToggle = null;
-  exposed.setPosts = null;
-  exposed.setVersion = null;
-  function makePost(id, author, ts, content, likes, liked) {
-    return { id, author, ts, content, likes, liked };
+  exposed.setTick = anyNull();
+  exposed.setSelected = anyNull();
+  var ROW_COUNT = 30;
+  var rowTitles = mkList();
+  for (var t = 0; t < ROW_COUNT; t++) {
+    rowTitles.push("Row " + String(t) + "  \xB7  hybrid AOT reconciler");
   }
-  function Header(props) {
-    return h("view-header", { id: -1, title: props.title, height: 56, background: "#fafafa" }, props.title);
-  }
-  var MemoHeader = RA.memo(Header);
-  function PostCard(props) {
+  function Row(props) {
+    var outer = mkObj();
+    outer.height = 34;
+    outer.marginHorizontal = 12;
+    outer.marginVertical = 2;
+    outer.borderRadius = 8;
+    outer.paddingLeft = 14;
+    outer.justifyContent = "center";
+    outer.backgroundColor = props.selected ? "#2a6df4" : props.hot ? "#ffd27f" : "#ffffff";
+    var label = mkObj();
+    label.fontSize = 13;
+    label.color = props.selected ? "#ffffff" : "#222222";
     return h(
-      "view-card",
-      { id: props.id, padding: 12, margin: 8, background: "#fff", borderRadius: 12 },
-      h("text-title", { id: props.id, title: props.title, fontSize: 16, color: "#111" }, props.title),
-      h("text-body", { id: props.id, body: props.body, fontSize: 13, color: "#333" }, props.body),
-      h("button", {
-        id: props.id,
-        likes: props.likes,
-        liked: props.liked,
-        background: props.liked ? "#e33" : "#eee",
-        borderRadius: 6,
-        onPress: props.onToggle
-      }, "Like " + props.likes)
+      "RCTView",
+      { style: outer, onPress: props.onPress, rowId: props.id },
+      h("RCTText", { style: label }, props.title)
     );
   }
-  var MemoPostCard = RA.memo(PostCard);
-  function Footer(props) {
-    return h("view-footer", { id: -2, likes: props.likes, height: 48 }, "total " + props.likes);
-  }
-  var MemoFooter = RA.memo(Footer);
+  var MemoRow = RA.memo(Row);
   function App(props) {
-    var st = RA.useState(props.initialPosts);
-    var posts = st[0];
-    var setPosts = st[1];
-    var vt = RA.useState(0);
-    var version = vt[0];
-    var setVersion = vt[1];
-    exposed.setPosts = setPosts;
-    exposed.setVersion = setVersion;
-    var onToggle = RA.useCallback(function(id) {
-      setPosts(function(ps) {
-        var next = ps.slice();
-        for (var j = 0; j < next.length; j++) {
-          if (next[j].id === id) {
-            var p = next[j];
-            next[j] = makePost(p.id, p.author, p.ts, p.content, p.liked ? p.likes - 1 : p.likes + 1, !p.liked);
-            break;
-          }
-        }
-        return next;
+    var st = RA.useState(0);
+    var tick = st[0];
+    var setTick = st[1];
+    var se = RA.useState(-1);
+    var selected = se[0];
+    var setSelected = se[1];
+    exposed.setTick = setTick;
+    exposed.setSelected = setSelected;
+    var onRowPress = RA.useCallback(function(id) {
+      setSelected(function(s) {
+        return s === id ? -1 : id;
       });
     }, mkList());
-    exposed.onToggle = onToggle;
-    var children = mkList();
-    children.push(h(MemoHeader, { key: 1e6, title: "Feed v" + version }));
-    var totalLikes = anyVal(0);
-    for (var i = anyVal(0); i < posts.length; i++) {
-      var post = posts[i];
-      totalLikes += post.likes;
-      children.push(h(MemoPostCard, {
-        key: post.id,
-        id: post.id,
-        title: post.author + " \xB7 " + post.ts,
-        body: post.content,
-        likes: post.likes,
-        liked: post.liked,
-        onToggle
+    var hot = tick % ROW_COUNT;
+    var rows = mkList();
+    for (var i = 0; i < ROW_COUNT; i++) {
+      rows.push(h(MemoRow, {
+        key: i,
+        id: i,
+        title: rowTitles[i],
+        hot: i === hot,
+        selected: i === selected,
+        onPress: onRowPress
       }));
     }
-    children.push(h(MemoFooter, { key: 1000001, likes: totalLikes }));
-    return h("view-root", { flex: 1, direction: "column" }, children);
+    var headerStyle = mkObj();
+    headerStyle.fontSize = 16;
+    headerStyle.fontWeight = "bold";
+    headerStyle.color = "#111111";
+    headerStyle.marginHorizontal = 12;
+    headerStyle.marginBottom = 8;
+    var headerText = String(props.banner) + "  \xB7  tick " + String(tick) + (selected >= 0 ? "  \xB7  selected " + String(selected) : "");
+    var header = h("RCTText", { style: headerStyle }, headerText);
+    var listStyle = mkObj();
+    listStyle.flex = 1;
+    var list = h("RCTView", { style: listStyle }, rows);
+    var rootStyle = mkObj();
+    rootStyle.flex = 1;
+    rootStyle.backgroundColor = "#eef1f6";
+    rootStyle.paddingTop = 70;
+    return h("RCTView", { style: rootStyle }, header, list);
   }
-  return { App, exposed, makePost };
+  var api = mkObj();
+  api.App = App;
+  api.exposed = exposed;
+  return api;
 }
-function runFeedDriver(app, flushInteraction, log) {
-  var POSTS = anyVal(150);
-  var WARMUP = anyVal(50);
-  var TICKS = anyVal(2e3);
-  var exposed = app.exposed;
-  var makePost = app.makePost;
-  var seed = anyVal(987654321);
-  function rand(n) {
-    seed = seed * 1103515245 + 12345 & 2147483647;
-    return seed % n;
-  }
-  var ids = mkList();
-  var initialPosts = mkList();
-  for (var i = anyVal(0); i < POSTS; i++) {
-    initialPosts.push(makePost(i + 1, "user" + i % 17, 17e8 + i, "post content " + i, i % 23, false));
-    ids.push(i + 1);
-  }
-  var nextPostId = anyVal(POSTS + 1);
-  function interact(tick) {
-    var r = rand(100);
-    if (r < 70) {
-      var id = ids[rand(ids.length)];
-      flushInteraction(function() {
-        exposed.onToggle(id);
+function runFabricMeasure(exposed, flushInteraction, ticks) {
+  var t0 = anyVal(Date.now());
+  for (var i = 0; i < ticks; i++) {
+    flushInteraction(function() {
+      exposed.setTick(function(tk) {
+        return tk + 1;
       });
-    } else if (r < 90) {
-      var editId = ids[rand(ids.length)];
-      flushInteraction(function() {
-        exposed.setPosts(function(ps) {
-          var next = ps.slice();
-          for (var j = 0; j < next.length; j++) {
-            if (next[j].id === editId) {
-              var p = next[j];
-              next[j] = makePost(p.id, p.author, p.ts, p.content + "!", p.likes, p.liked);
-              break;
-            }
-          }
-          return next;
-        });
-      });
-    } else {
-      var newId = nextPostId++;
-      var author = "user" + tick % 17;
-      var ts = 17e8 + tick;
-      var content = "new post " + tick;
-      if (ids.length >= 200) {
-        ids.pop();
-      }
-      ids.unshift(newId);
-      flushInteraction(function() {
-        exposed.setPosts(function(ps) {
-          var next = ps.slice();
-          var np = makePost(newId, author, ts, content, 0, false);
-          if (next.length >= 200) {
-            next.pop();
-          }
-          next.unshift(np);
-          return next;
-        });
-        exposed.setVersion(function(v) {
-          return v + 1;
-        });
-      });
-    }
+    });
   }
-  return {
-    initialPosts,
-    warmup: function() {
-      for (var w = anyVal(0); w < WARMUP; w++) {
-        interact(w);
-      }
-    },
-    run: function() {
-      var t0 = anyVal(Date.now());
-      for (var t = anyVal(0); t < TICKS; t++) {
-        interact(t + WARMUP);
-      }
-      return { ms: Date.now() - t0, ticks: TICKS, posts: ids.length };
-    }
-  };
+  var out = mkObj();
+  out.ms = Date.now() - t0;
+  out.ticks = ticks;
+  return out;
 }
 var React = require_react();
 var Reconciler = require_react_reconciler();
 var HostConfig = {
-  supportsMutation: true,
-  supportsPersistence: false,
+  supportsMutation: false,
+  supportsPersistence: true,
   supportsHydration: false,
-  isPrimaryRenderer: false,
+  isPrimaryRenderer: true,
   noTimeout: -1,
   scheduleTimeout: function() {
     return -1;
@@ -5646,11 +5877,11 @@ var HostConfig = {
   },
   preparePortalMount: function() {
   },
-  createInstance: function(type, props) {
-    return hcCreateInstance(type, props);
+  createInstance: function(type, props, rootContainer, hostContext, handle) {
+    return hcCreateInstance(type, props, handle);
   },
-  createTextInstance: function(text) {
-    return hcCreateTextInstance(text);
+  createTextInstance: function(text, rootContainer, hostContext, handle) {
+    return hcCreateTextInstance(text, handle);
   },
   appendInitialChild: function(p, c) {
     hcAppendChild(p, c);
@@ -5659,51 +5890,10 @@ var HostConfig = {
     return false;
   },
   prepareUpdate: function(inst, type, oldProps, newProps) {
-    return diffHostProps(oldProps, newProps);
+    return diffHostProps(oldProps, newProps, inst);
   },
   shouldSetTextContent: function() {
     return false;
-  },
-  appendChild: function(p, c) {
-    hcAppendChild(p, c);
-  },
-  appendChildToContainer: function(ctr, c) {
-    hcAppendChild(ctr, c);
-  },
-  insertBefore: function(p, c, b) {
-    hcInsertBefore(p, c, b);
-  },
-  insertInContainerBefore: function(ctr, c, b) {
-    hcInsertBefore(ctr, c, b);
-  },
-  removeChild: function(p, c) {
-    hcRemoveChild(p, c);
-  },
-  removeChildFromContainer: function(ctr, c) {
-    hcRemoveChild(ctr, c);
-  },
-  resetTextContent: function() {
-  },
-  commitTextUpdate: function(i, o, n) {
-    hcCommitTextUpdate(i, o, n);
-  },
-  commitMount: function() {
-  },
-  commitUpdate: function(inst, payload, type, oldProps, newProps) {
-    hcCommitUpdate(inst, payload, newProps);
-  },
-  hideInstance: function() {
-  },
-  unhideInstance: function() {
-  },
-  hideTextInstance: function() {
-  },
-  unhideTextInstance: function() {
-  },
-  clearContainer: function(c) {
-    c.children = mkList();
-  },
-  detachDeletedInstance: function() {
   },
   getCurrentEventPriority: function() {
     return 16;
@@ -5719,52 +5909,110 @@ var HostConfig = {
   },
   getInstanceFromScope: function() {
     return null;
+  },
+  detachDeletedInstance: function() {
+  },
+  // persistence
+  cloneInstance: function(instance, updatePayload, type, oldProps, newProps, handle, keepChildren) {
+    return hcCloneInstance(instance, updatePayload, type, newProps, keepChildren);
+  },
+  createContainerChildSet: function() {
+    return hcCreateContainerChildSet();
+  },
+  appendChildToContainerChildSet: function(childSet, child) {
+    hcAppendChildToContainerChildSet(childSet, child);
+  },
+  finalizeContainerChildren: function(container, childSet) {
+    hcFinalizeContainerChildren(container, childSet);
+  },
+  replaceContainerChildren: function(container, childSet) {
+    hcReplaceContainerChildren(container, childSet);
+  },
+  cloneHiddenInstance: function(instance) {
+    return instance;
+  },
+  cloneHiddenTextInstance: function(instance) {
+    return instance;
   }
 };
-function runBenchmark() {
-  hcResetAll();
-  var R = Reconciler(HostConfig);
-  var appApi = installFeedApp({
+var R = null;
+var appApi = null;
+var rootHandle = null;
+function start(env) {
+  fhInit(env);
+  R = Reconciler(HostConfig);
+  appApi = installFabricApp({
     createElement: React.createElement,
     useState: React.useState,
     useCallback: React.useCallback,
     memo: React.memo
   });
-  var driver = runFeedDriver(appApi, function(fn) {
-    R.flushSync(fn);
-  }, null);
-  var rootContainer = { id: 0, type: "root", children: mkList() };
-  var root = R.createContainer(
-    rootContainer,
+  var containerInfo = { containerTag: env.rootTag };
+  rootHandle = R.createContainer(
+    containerInfo,
     0,
     null,
     false,
     null,
     "",
-    function() {
+    function(e) {
+      env.log("[FabricTwin] recoverableError: " + e);
     },
     null
   );
   R.flushSync(function() {
     R.updateContainer(
-      React.createElement(appApi.App, { initialPosts: driver.initialPosts }),
-      root,
+      React.createElement(appApi.App, { banner: env.banner }),
+      rootHandle,
       null,
       null
     );
   });
-  driver.warmup();
-  hostStatsReset();
-  var res = driver.run();
-  return {
-    label: "real-react-reconciler(18.3.1)",
-    ms: res.ms,
-    ticks: res.ticks,
-    posts: res.posts,
-    host: hostStatsLine()
-  };
+  env.log("[FabricTwin] mounted: " + fhStatsLine());
 }
-module.exports = { impl: "interpreted-real-react-18.3.1", run: runBenchmark };
+function measure(warmupTicks, ticks) {
+  var flush = function(fn) {
+    R.flushSync(fn);
+  };
+  runFabricMeasure(appApi.exposed, flush, warmupTicks);
+  fhResetStats();
+  var res = runFabricMeasure(appApi.exposed, flush, ticks);
+  return { ms: res.ms, ticks: res.ticks, host: fhStatsLine() };
+}
+function tickOnce() {
+  R.flushSync(function() {
+    appApi.exposed.setTick(function(tk) {
+      return tk + 1;
+    });
+  });
+}
+function dispatchTouch(target, eventType, nativeEvent) {
+  if (eventType !== "topTouchEnd") {
+    return;
+  }
+  var f = target;
+  var guard = 0;
+  while (f != null && guard < 100) {
+    var p = f.memoizedProps;
+    if (p != null && typeof p.onPress === "function") {
+      var cb = p.onPress;
+      var arg = p.rowId;
+      R.flushSync(function() {
+        cb(arg);
+      });
+      return;
+    }
+    f = f.return;
+    guard++;
+  }
+}
+module.exports = {
+  impl: "interpreted-real-react-18.3.1-fabric",
+  start,
+  measure,
+  tickOnce,
+  dispatchTouch
+};
 /*! Bundled license information:
 
 react/cjs/react.production.min.js:

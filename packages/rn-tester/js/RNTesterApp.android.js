@@ -14,4 +14,8 @@ import './HybridAOTDemo';
 
 AppRegistry.registerComponent('RNTesterApp', () => RNTesterApp);
 
+// Must run AFTER registerComponent (its registerRunnable overrides the same
+// app key), hence require() rather than a hoisted import.
+require('./HybridFabricDemo');
+
 module.exports = RNTesterApp;
