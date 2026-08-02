@@ -287,29 +287,34 @@ void ReactInstance::loadScript(
           ReactMarker::logMarker(ReactMarker::APP_STARTUP_START);
         }
 
+        // Diagnostics bridge, installed UNCONDITIONALLY: RCTLog is compiled
+        // out in release builds, so without this an all-interpreted build
+        // (no units linked) has no log channel at all — which makes a
+        // hybrid-vs-interpreted comparison impossible to observe on iOS.
+        {
+          auto hybridLog = jsi::Function::createFromHostFunction(
+              runtime,
+              jsi::PropNameID::forAscii(runtime, "__hybridLog"),
+              1,
+              [](jsi::Runtime& rt,
+                 const jsi::Value&,
+                 const jsi::Value* args,
+                 size_t n) -> jsi::Value {
+                if (n > 0) {
+                  LOG(WARNING)
+                      << "[HybridAOT] " << args[0].toString(rt).utf8(rt);
+                }
+                return jsi::Value::undefined();
+              });
+          runtime.global().setProperty(runtime, "__hybridLog", hybridLog);
+        }
+
         // Hybrid AOT prototype: evaluate registry SHUnits BEFORE the bundle
         // so its __d prelude can dispatch per module by content hash. This is
         // additive: the bundle still evaluates normally below.
         if (sh_export_core != nullptr || sh_export_ring1 != nullptr ||
             sh_export_fabriccore != nullptr) {
           if (auto* hybridAPI = jsi::castInterface<hermes::IHermes>(&runtime)) {
-            // Reliable log channel for the demo (RCTLog is compiled out in
-            // release builds): glog goes to stderr on both platforms.
-            auto hybridLog = jsi::Function::createFromHostFunction(
-                runtime,
-                jsi::PropNameID::forAscii(runtime, "__hybridLog"),
-                1,
-                [](jsi::Runtime& rt,
-                   const jsi::Value&,
-                   const jsi::Value* args,
-                   size_t n) -> jsi::Value {
-                  if (n > 0) {
-                    LOG(WARNING)
-                        << "[HybridAOT] " << args[0].toString(rt).utf8(rt);
-                  }
-                  return jsi::Value::undefined();
-                });
-            runtime.global().setProperty(runtime, "__hybridLog", hybridLog);
             // Per-unit evaluation timing, exposed to JS as
             // global.__hybridEvalMs (glog is not visible in logcat on
             // Android release builds).

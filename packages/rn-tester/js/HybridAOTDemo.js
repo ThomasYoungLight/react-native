@@ -13,6 +13,53 @@
 const core = require('./hybrid/HybridReactCore');
 const util = require('./hybrid/HybridUtil');
 
+// Test-harness error bridge: in release builds RN's console/RCTLog output is
+// compiled out on iOS, so a JS red-box error is invisible to a device console
+// capture. Route JS errors through the __hybridLog glog host function with a
+// greppable prefix so the sweep harness sees the same signal on both
+// platforms. Installed at module scope so it covers the whole session.
+(function installErrorBridge() {
+  const g: $FlowFixMe = global;
+  const emit = (kind: string, text: string) => {
+    const line = '[HybridErr] ' + kind + ': ' + text;
+    if (g.__hybridLog != null) {
+      g.__hybridLog(line);
+    }
+    /* eslint-disable-next-line no-console */
+    console.log(line);
+  };
+  const fmt = (args: $ReadOnlyArray<mixed>) =>
+    args
+      .map(a => {
+        if (a instanceof Error) {
+          return String(a.message) + ' | ' + String(a.stack).slice(0, 400);
+        }
+        try {
+          return typeof a === 'string' ? a : JSON.stringify(a);
+        } catch (e) {
+          return String(a);
+        }
+      })
+      .join(' ')
+      .slice(0, 600);
+
+  if (g.ErrorUtils != null && typeof g.ErrorUtils.setGlobalHandler === 'function') {
+    const prev = g.ErrorUtils.getGlobalHandler && g.ErrorUtils.getGlobalHandler();
+    g.ErrorUtils.setGlobalHandler((error: $FlowFixMe, isFatal: boolean) => {
+      emit(isFatal === true ? 'FATAL' : 'ERROR', fmt([error]));
+      if (typeof prev === 'function') {
+        prev(error, isFatal);
+      }
+    });
+  }
+  const origError = console.error;
+  /* eslint-disable-next-line no-console */
+  console.error = (...args: $ReadOnlyArray<mixed>) => {
+    emit('CONSOLE', fmt(args));
+    origError.apply(console, (args: $FlowFixMe));
+  };
+})();
+
 function runDemo() {
   /* eslint-disable no-console */
   const g: $FlowFixMe = global;
