@@ -5757,6 +5757,179 @@ function fhStatsLine() {
   var s = FH.stats;
   return "fabric-host: creates=" + String(s.creates) + " textCreates=" + String(s.textCreates) + " appends=" + String(s.appends) + " clones=" + String(s.clones) + " childSets=" + String(s.childSets) + " setAppends=" + String(s.setAppends) + " completeRoots=" + String(s.completeRoots);
 }
+function createResponderSystem(flushInteraction, log) {
+  var sys = mkObj();
+  sys.responder = null;
+  sys.startPageX = 0;
+  sys.startPageY = 0;
+  function fiberParent(f) {
+    if (f === null || f === void 0) {
+      return null;
+    }
+    if (f.ret !== void 0 && f.ret !== null) {
+      return f.ret;
+    }
+    var viaReturn = f["return"];
+    if (viaReturn !== void 0 && viaReturn !== null) {
+      return viaReturn;
+    }
+    return null;
+  }
+  function handlerOf(fiber, name) {
+    var p = fiber.memoizedProps;
+    if (p !== null && p !== void 0 && typeof p[name] === "function") {
+      return p[name];
+    }
+    return null;
+  }
+  function eventPoint(nativeEvent) {
+    var t = nativeEvent;
+    if (nativeEvent !== null && nativeEvent !== void 0 && nativeEvent.changedTouches !== null && nativeEvent.changedTouches !== void 0 && nativeEvent.changedTouches.length > 0) {
+      t = nativeEvent.changedTouches[0];
+    }
+    var pt = mkObj();
+    pt.pageX = t !== null && t !== void 0 && t.pageX !== void 0 ? t.pageX : 0;
+    pt.pageY = t !== null && t !== void 0 && t.pageY !== void 0 ? t.pageY : 0;
+    return pt;
+  }
+  function makeEvent(type, targetFiber, nativeEvent) {
+    var pt = eventPoint(nativeEvent);
+    var e = mkObj();
+    e.type = type;
+    e.target = targetFiber;
+    e.nativeEvent = nativeEvent;
+    e.pageX = pt.pageX;
+    e.pageY = pt.pageY;
+    e.gestureDX = pt.pageX - sys.startPageX;
+    e.gestureDY = pt.pageY - sys.startPageY;
+    return e;
+  }
+  function pathOf(target) {
+    var path = mkList();
+    var f = target;
+    var guard = 0;
+    while (f !== null && guard < 200) {
+      if (f.memoizedProps !== null && f.memoizedProps !== void 0) {
+        path.push(f);
+      }
+      f = fiberParent(f);
+      guard++;
+    }
+    return path;
+  }
+  function findWantingResponder(phase, target, ev) {
+    var path;
+    if (sys.responder === null) {
+      path = pathOf(target);
+    } else {
+      var parent = fiberParent(sys.responder);
+      path = parent !== null ? pathOf(parent) : mkList();
+    }
+    if (path.length === 0) {
+      return null;
+    }
+    var captureName = phase === "start" ? "onStartShouldSetResponderCapture" : "onMoveShouldSetResponderCapture";
+    var bubbleName = phase === "start" ? "onStartShouldSetResponder" : "onMoveShouldSetResponder";
+    for (var i = path.length - 1; i >= 0; i--) {
+      var hC = handlerOf(path[i], captureName);
+      if (hC !== null && hC(ev) === true) {
+        return path[i];
+      }
+    }
+    for (var j = 0; j < path.length; j++) {
+      var hB = handlerOf(path[j], bubbleName);
+      if (hB !== null && hB(ev) === true) {
+        return path[j];
+      }
+    }
+    return null;
+  }
+  function callResponder(name, ev) {
+    if (sys.responder === null) {
+      return;
+    }
+    var fn = handlerOf(sys.responder, name);
+    if (fn !== null) {
+      fn(ev);
+    }
+  }
+  function grantTo(fiber, ev) {
+    sys.responder = fiber;
+    var fn = handlerOf(fiber, "onResponderGrant");
+    if (fn !== null) {
+      fn(ev);
+    }
+  }
+  function negotiate(phase, target, ev) {
+    var wanting = findWantingResponder(phase, target, ev);
+    if (wanting === null || wanting === sys.responder) {
+      return;
+    }
+    if (sys.responder === null) {
+      grantTo(wanting, ev);
+      return;
+    }
+    var reqFn = handlerOf(sys.responder, "onResponderTerminationRequest");
+    var allow = true;
+    if (reqFn !== null) {
+      allow = reqFn(ev) !== false;
+    }
+    if (allow) {
+      var termFn = handlerOf(sys.responder, "onResponderTerminate");
+      if (termFn !== null) {
+        termFn(ev);
+      }
+      grantTo(wanting, ev);
+    } else {
+      var rejFn = handlerOf(wanting, "onResponderReject");
+      if (rejFn !== null) {
+        rejFn(ev);
+      }
+    }
+  }
+  sys.handleEvent = function(target, eventType, nativeEvent) {
+    flushInteraction(function() {
+      if (eventType === "topTouchStart") {
+        var pt = eventPoint(nativeEvent);
+        if (sys.responder === null) {
+          sys.startPageX = pt.pageX;
+          sys.startPageY = pt.pageY;
+        }
+        var evS = makeEvent("touchStart", target, nativeEvent);
+        negotiate("start", target, evS);
+        callResponder("onResponderStart", evS);
+        return;
+      }
+      if (eventType === "topTouchMove") {
+        var evM = makeEvent("touchMove", target, nativeEvent);
+        negotiate("move", target, evM);
+        callResponder("onResponderMove", evM);
+        return;
+      }
+      if (eventType === "topTouchEnd") {
+        var evE = makeEvent("touchEnd", target, nativeEvent);
+        var remaining = 0;
+        if (nativeEvent !== null && nativeEvent !== void 0 && nativeEvent.touches !== null && nativeEvent.touches !== void 0) {
+          remaining = nativeEvent.touches.length;
+        }
+        if (remaining === 0) {
+          callResponder("onResponderRelease", evE);
+          sys.responder = null;
+        } else {
+          callResponder("onResponderEnd", evE);
+        }
+        return;
+      }
+      if (eventType === "topTouchCancel") {
+        var evC = makeEvent("touchCancel", target, nativeEvent);
+        callResponder("onResponderTerminate", evC);
+        sys.responder = null;
+        return;
+      }
+    });
+  };
+  return sys;
+}
 function installFabricApp(RA) {
   var h = RA.createElement;
   var exposed = mkObj();
@@ -5768,6 +5941,34 @@ function installFabricApp(RA) {
     rowTitles.push("Row " + String(t) + "  \xB7  hybrid AOT reconciler");
   }
   function Row(props) {
+    var pr = RA.useState(false);
+    var pressed = pr[0];
+    var setPressed = pr[1];
+    var startShould = RA.useCallback(function() {
+      return true;
+    }, mkList());
+    var grant = RA.useCallback(function(e) {
+      setPressed(function() {
+        return true;
+      });
+    }, mkList());
+    var relDeps = mkList();
+    relDeps.push(props.id);
+    relDeps.push(props.onPress);
+    var release = RA.useCallback(function(e) {
+      setPressed(function() {
+        return false;
+      });
+      props.onPress(props.id);
+    }, relDeps);
+    var terminate = RA.useCallback(function(e) {
+      setPressed(function() {
+        return false;
+      });
+    }, mkList());
+    var termRequest = RA.useCallback(function(e) {
+      return true;
+    }, mkList());
     var outer = mkObj();
     outer.height = 34;
     outer.marginHorizontal = 12;
@@ -5775,13 +5976,21 @@ function installFabricApp(RA) {
     outer.borderRadius = 8;
     outer.paddingLeft = 14;
     outer.justifyContent = "center";
-    outer.backgroundColor = props.selected ? "#2a6df4" : props.hot ? "#ffd27f" : "#ffffff";
+    outer.backgroundColor = pressed ? "#9dbdf9" : props.selected ? "#2a6df4" : props.hot ? "#ffd27f" : "#ffffff";
     var label = mkObj();
     label.fontSize = 13;
     label.color = props.selected ? "#ffffff" : "#222222";
     return h(
       "RCTView",
-      { style: outer, onPress: props.onPress, rowId: props.id },
+      {
+        style: outer,
+        rowId: props.id,
+        onStartShouldSetResponder: startShould,
+        onResponderGrant: grant,
+        onResponderRelease: release,
+        onResponderTerminate: terminate,
+        onResponderTerminationRequest: termRequest
+      },
       h("RCTText", { style: label }, props.title)
     );
   }
@@ -5793,12 +6002,26 @@ function installFabricApp(RA) {
     var se = RA.useState(-1);
     var selected = se[0];
     var setSelected = se[1];
+    var sl = RA.useState(0);
+    var steals = sl[0];
+    var setSteals = sl[1];
     exposed.setTick = setTick;
     exposed.setSelected = setSelected;
     var onRowPress = RA.useCallback(function(id) {
       setSelected(function(s) {
         return s === id ? -1 : id;
       });
+    }, mkList());
+    var listMoveCapture = RA.useCallback(function(e) {
+      return e.gestureDY > 24 || e.gestureDY < -24;
+    }, mkList());
+    var listGrant = RA.useCallback(function(e) {
+      setSteals(function(s2) {
+        return s2 + 1;
+      });
+    }, mkList());
+    var listTermRequest = RA.useCallback(function(e) {
+      return true;
     }, mkList());
     var hot = tick % ROW_COUNT;
     var rows = mkList();
@@ -5818,12 +6041,17 @@ function installFabricApp(RA) {
     headerStyle.color = "#111111";
     headerStyle.marginHorizontal = 12;
     headerStyle.marginBottom = 8;
-    var headerText = String(props.banner) + "  \xB7  tick " + String(tick) + (selected >= 0 ? "  \xB7  selected " + String(selected) : "");
+    var headerText = String(props.banner) + "  \xB7  tick " + String(tick) + (selected >= 0 ? "  \xB7  selected " + String(selected) : "") + (steals > 0 ? "  \xB7  scrollSteals " + String(steals) : "");
     var header = h("RCTText", { style: headerStyle }, headerText);
     var listStyle = mkObj();
     listStyle.flex = 1;
     listStyle.overflow = "hidden";
-    var list = h("RCTView", { style: listStyle }, rows);
+    var list = h("RCTView", {
+      style: listStyle,
+      onMoveShouldSetResponderCapture: listMoveCapture,
+      onResponderGrant: listGrant,
+      onResponderTerminationRequest: listTermRequest
+    }, rows);
     var rootStyle = mkObj();
     rootStyle.flex = 1;
     rootStyle.backgroundColor = "#eef1f6";
@@ -5992,25 +6220,11 @@ function tickOnce() {
     });
   });
 }
+var responderSystem = createResponderSystem(function(fn) {
+  R.flushSync(fn);
+}, null);
 function dispatchTouch(target, eventType, nativeEvent) {
-  if (eventType !== "topTouchEnd") {
-    return;
-  }
-  var f = target;
-  var guard = 0;
-  while (f != null && guard < 100) {
-    var p = f.memoizedProps;
-    if (p != null && typeof p.onPress === "function") {
-      var cb = p.onPress;
-      var arg = p.rowId;
-      R.flushSync(function() {
-        cb(arg);
-      });
-      return;
-    }
-    f = f.return;
-    guard++;
-  }
+  responderSystem.handleEvent(target, eventType, nativeEvent);
 }
 module.exports = {
   impl: "interpreted-real-react-18.3.1-fabric",

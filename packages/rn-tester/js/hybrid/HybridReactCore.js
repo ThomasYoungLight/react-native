@@ -5345,7 +5345,8 @@ var hostStats = {
   hides: 0,
   unhides: 0,
   hiddenClones: 0,
-  checksum: 0
+  checksum: 0,
+  treeSum: 0
 };
 var nextInstanceId = 1;
 function mix(n) {
@@ -5463,7 +5464,7 @@ function hcUnhideTextInstance(inst, text) {
   mix(hashStr(text));
 }
 function hostStatsLine() {
-  return "host: creates=" + String(hostStats.creates) + " textCreates=" + String(hostStats.textCreates) + " appends=" + String(hostStats.appends) + " inserts=" + String(hostStats.inserts) + " removes=" + String(hostStats.removes) + " updates=" + String(hostStats.updates) + " textUpdates=" + String(hostStats.textUpdates) + " clones=" + String(hostStats.clones) + " childSets=" + String(hostStats.childSets) + " replaces=" + String(hostStats.replaces) + " hides=" + String(hostStats.hides) + " unhides=" + String(hostStats.unhides) + " hiddenClones=" + String(hostStats.hiddenClones) + " checksum=" + String(hostStats.checksum >>> 0);
+  return "host: creates=" + String(hostStats.creates) + " textCreates=" + String(hostStats.textCreates) + " appends=" + String(hostStats.appends) + " inserts=" + String(hostStats.inserts) + " removes=" + String(hostStats.removes) + " updates=" + String(hostStats.updates) + " textUpdates=" + String(hostStats.textUpdates) + " clones=" + String(hostStats.clones) + " childSets=" + String(hostStats.childSets) + " replaces=" + String(hostStats.replaces) + " hides=" + String(hostStats.hides) + " unhides=" + String(hostStats.unhides) + " hiddenClones=" + String(hostStats.hiddenClones) + " tree=" + String(hostStats.treeSum >>> 0) + " checksum=" + String(hostStats.checksum >>> 0);
 }
 function hcResetAll() {
   nextInstanceId = 1;
@@ -5484,6 +5485,7 @@ function hostStatsReset() {
   hostStats.updates = 0;
   hostStats.textUpdates = 0;
   hostStats.checksum = 0;
+  hostStats.treeSum = 0;
 }
 function installFeedApp(RA) {
   var h = RA.createElement;
